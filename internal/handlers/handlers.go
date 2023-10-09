@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/CloudyKit/jet/v6"
-	"github.com/gofiber/websocket/v2"
 	"github.com/gorilla/websocket"
 )
 
@@ -28,9 +27,9 @@ func Home(w http.ResponseWriter, r *http.Request) {
 }
 
 type WsJsonResponse struct {
-	Action         string   `json:"action"`
-	Message        string   `json:"message"`
-	MessageType    string   `json:"message_type"`
+	Action      string `json:"action"`
+	Message     string `json:"message"`
+	MessageType string `json:"message_type"`
 }
 
 func WsEndpoint(w http.ResponseWriter, r *http.Request) {
@@ -44,10 +43,8 @@ func WsEndpoint(w http.ResponseWriter, r *http.Request) {
 	var response WsJsonResponse
 	response.Message = `<em><small>Connected to server</small></em>`
 
-
-
 	err = ws.WriteJSON(response)
-	
+
 	if err != nil {
 		log.Println(err)
 	}
