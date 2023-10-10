@@ -67,6 +67,8 @@ func WsEndpoint(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
+
+	go ListenForWs(&conn)
 }
 
 func ListenForWs(conn *WebSocketConnection) {
@@ -89,6 +91,17 @@ func ListenForWs(conn *WebSocketConnection) {
 		}
 	}
 
+}
+
+func ListenToWsChannel() {
+	var response WsJsonResponse
+
+	for {
+		e := <-wsChan
+
+		response.Action = "Got here"
+		response.Message = fmt.Sprintf("Some message, and action was %s", e.Action)
+	}
 }
 
 func renderPage(w http.ResponseWriter, tmpl string, data jet.VarMap) error {
