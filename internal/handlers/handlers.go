@@ -108,7 +108,16 @@ func ListenToWsChannel() {
 			response.Action = "list_users"
 			response.ConnectedUsers = users
 			BroadcastToAll(response)
+
+		case "left":
+			response.Action = "list_users"
+			delete(clients, e.Conn)
+			users := getUserList()
+			response.ConnectedUsers = users
+			BroadcastToAll(response)
+			
 		}
+
 
 		// response.Action = "Got here"
 		// response.Message = fmt.Sprintf("Some message, and action was %s", e.Action)
