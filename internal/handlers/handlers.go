@@ -107,15 +107,19 @@ func ListenToWsChannel() {
 			users := getUserList()
 			response.Action = "list_users"
 			response.ConnectedUsers = users
-			BroadcastToAll(response)
+			broadcastToAll(response)
 
 		case "left":
 			response.Action = "list_users"
 			delete(clients, e.Conn)
 			users := getUserList()
 			response.ConnectedUsers = users
-			BroadcastToAll(response)
+			broadcastToAll(response)
 
+		case "broadcast":
+			response.Action = "broadcast"
+			response.Message = fmt.Sprintf("<strong>%s</strong>: %s", e.Username, e.Message)
+			broadcastToAll(response)
 		}
 
 
@@ -137,7 +141,7 @@ func getUserList() []string {
 	return userList
 }
 
-func BroadcastToAll(response WsJsonResponse) {
+func broadcastToAll(response WsJsonResponse) {
 	for client := range clients {
 		err := client.WriteJSON(response)
 		if err != nil {
